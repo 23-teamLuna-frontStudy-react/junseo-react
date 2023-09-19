@@ -136,7 +136,9 @@ interface PriceData {
   };
 }
 
-function Coin() {
+interface ICoinProps {}
+
+function Coin({}: ICoinProps) {
   const { coinId } = useParams();
   const { state } = useLocation();
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
