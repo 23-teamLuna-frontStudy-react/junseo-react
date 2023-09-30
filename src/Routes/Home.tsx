@@ -39,7 +39,7 @@ const Overview = styled.p`
 
 const Slider = styled.div`
   position: relative;
-  top: -200px;
+  top: -100px;
 `;
 
 const Row = styled(motion.div)`
@@ -53,17 +53,61 @@ const Row = styled(motion.div)`
 const Box = styled(motion.div)<{ bgPhoto: string }>`
   background-color: #ffffff;
   background-image: url(${(props) => props.bgPhoto});
-  color: red;
   height: 200px;
   font-size: 66px;
   background-size: cover;
   background-position: center center;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
+`;
+
+const Info = styled(motion.div)`
+  padding: 10px;
+  background-color: ${(props) => props.theme.black.lighter};
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  h4 {
+    text-align: center;
+    font-size: 18px;
+  }
 `;
 
 const rowVariants: Variants = {
   hidden: { x: window.outerWidth + 10 },
   visible: { x: 0 },
   exit: { x: -window.outerWidth - 10 },
+};
+
+const BoxVariants: Variants = {
+  normal: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.3,
+    y: -50,
+    transition: {
+      delay: 0.5,
+      duration: 0.1,
+      type: "tween",
+    },
+  },
+};
+
+const infoVariants: Variants = {
+  hover: {
+    opacity: 1,
+    transition: {
+      delay: 0.5,
+      duration: 0.1,
+      type: "tween",
+    },
+  },
 };
 
 const offset = 6;
@@ -115,9 +159,17 @@ function Home() {
                   .slice(offset * index, offset * index + offset)
                   .map((movie) => (
                     <Box
+                      transition={{ type: "tween" }}
                       key={movie.id}
+                      whileHover="hover"
+                      variants={BoxVariants}
+                      initial="normal"
                       bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
-                    />
+                    >
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
+                    </Box>
                   ))}
               </Row>
             </AnimatePresence>
